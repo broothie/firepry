@@ -1,14 +1,29 @@
 # 🔥💎 firepry
 
-A Firestore REPL that's actually just Pry.
+A Firestore REPL that's actually just [Pry](https://github.com/pry/pry).
 
 ## About
 
 It's nice to be able to drop into a SQL console when you need to wrangle some queries. There's no real "native" way to
-do this, so **`firepry`** serves as way to drop into a Pry (Ruby) REPL with your Firestore db loaded up in a local
+do this, so **`firepry`** serves as way to drop into a Pry (Ruby) REPL with your Firestore DB loaded up in a local
 (`firestore` (or `db`)).
 
+### Why Pry/Ruby?
+
+I'm probably biased because I've worked with Ruby/Rails quite a bit, but the DSL-ish nature of Ruby lends itself very
+well to being used as a Firestore DB REPL. Should be (hopefully) quick to learn for users of most languages.
+
 ## Usage
+
+Installation:
+
+```shell
+$ gem install firepry
+```
+
+[Here's](https://github.com/googleapis/google-cloud-ruby/tree/master/google-cloud-firestore) a link to the Ruby Firestore Github docs.
+
+[Here's](https://firebase.google.com/docs/firestore/manage-data/add-data#ruby) a link to the Firestore docs, just be sure to select `Ruby` in the code examples.
 
 Here's the help text:
 
@@ -20,7 +35,7 @@ Usage: firepry [options]
     -e, --endpoint ENDPOINT          Firestore endpoint URL
 ```
 
-Here's some example usage:
+And here's some example usage:
 
 ```bash
 $ firepry
@@ -32,10 +47,6 @@ $ firepry
  @path="projects/project-id/databases/(default)/documents/users",
  @query=<Google::Cloud::Firestore::V1::StructuredQuery: from: [<Google::Cloud::Firestore::V1::StructuredQuery::CollectionSelector: collection_id: "users", all_descendants: false>], order_by: [], offset: 0>>
 ```
-
-[Here's](https://github.com/googleapis/google-cloud-ruby/tree/master/google-cloud-firestore) a link to the Github docs.
-
-And [here's](https://firebase.google.com/docs/firestore/manage-data/add-data#ruby) a link to the Firestore docs, just be sure to select `Ruby` in the code examples. 
 
 ## How it works
 
@@ -71,3 +82,7 @@ alias db firestore
 
 Pry.start
 ```
+
+## Attributions
+
+- https://github.com/pry/pry
