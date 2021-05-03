@@ -1,25 +1,17 @@
 #! /usr/bin/env ruby
+require 'dotenv/load'
 require 'optparse'
 require 'pry'
 require 'google/cloud/firestore'
 
 firestore_options = {}
 OptionParser.new do |opts|
-  opts.on('-p', '--project-id PROJECT-ID', 'GCP project ID') do |opt|
-    firestore_options[:project_id] = opt
-  end
-
-  opts.on('-k', '--keyfile KEYFILE', 'GCP keyfile') do |opt|
-    firestore_options[:keyfile] = opt
-  end
-
-  opts.on('-e', '--endpoint ENDPOINT', 'Firestore endpoint URL') do |opt|
-    firestore_options[:endpoint] = opt
-  end
+  opts.on('-p', '--project-id PROJECT-ID', 'GCP project ID') { |opt| firestore_options[:project_id] = opt }
+  opts.on('-k', '--keyfile KEYFILE', 'GCP keyfile') { |opt| firestore_options[:keyfile] = opt }
+  opts.on('-e', '--endpoint ENDPOINT', 'Firestore endpoint URL') { |opt| firestore_options[:endpoint] = opt }
 end.parse!
 
 @firestore = Google::Cloud::Firestore.new(**firestore_options)
-
 def firestore
   @firestore
 end
