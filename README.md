@@ -1,12 +1,12 @@
-# 🔥💎 firepry
+# 🔥💎 `firepry`
 
 A [Firestore](https://cloud.google.com/firestore) REPL that's actually just [Pry](https://github.com/pry/pry).
 
 ## About
 
 It's nice to be able to drop into a SQL console when you need to wrangle some queries. There's no real "native" way to
-do this, so **`firepry`** serves as way to drop into a Pry (Ruby) REPL with your Firestore DB loaded up in a local
-(`firestore` or `db`).
+do this for Firestore, so **`firepry`** serves as way to drop into a Pry (Ruby) REPL with your Firestore DB loaded up as
+the current context.
 
 ### Why Pry/Ruby?
 
