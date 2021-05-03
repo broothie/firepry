@@ -1,13 +1,16 @@
+require_relative 'lib/firepry'
+
 Gem::Specification.new do |gem|
   gem.name = 'firepry'
   gem.summary = 'A Firestore Pry console'
-  gem.version = '0.1.1'
+  gem.version = FirePry::VERSION
   gem.license = 'MIT'
 
   gem.author = 'Andrew Booth'
   gem.email = 'andrew@andrewbooth.xyz'
   gem.homepage = 'https://github.com/broothie/firepry'
 
+  gem.files = ['lib/firepry.rb']
   gem.executables << 'firepry'
 
   gem.required_ruby_version = '>= 2.5.5'

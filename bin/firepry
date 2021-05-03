@@ -3,18 +3,30 @@ require 'dotenv/load'
 require 'optparse'
 require 'pry'
 require 'google/cloud/firestore'
+require 'firepry'
 
 firestore_options = {}
 OptionParser.new do |opts|
+  opts.banner = "firepry v#{FirePry::VERSION}\nUsage: firepry [options]"
+
+  opts.on('-v', '--version', 'Show version') { puts "firepry v#{FirePry::VERSION}"; exit }
   opts.on('-p', '--project-id PROJECT-ID', 'GCP project ID') { |opt| firestore_options[:project_id] = opt }
   opts.on('-k', '--keyfile KEYFILE', 'GCP keyfile') { |opt| firestore_options[:keyfile] = opt }
   opts.on('-e', '--endpoint ENDPOINT', 'Firestore endpoint URL') { |opt| firestore_options[:endpoint] = opt }
 end.parse!
 
 @firestore = Google::Cloud::Firestore.new(**firestore_options)
-def firestore
-  @firestore
-end
-alias db firestore
 
-Pry.start
+def current_obj(obj)
+  obj == @firestore ? 'db' : obj
+end
+
+line = 0
+Pry.start(
+  @firestore,
+  prompt: Pry::Prompt.new(
+    'firepry',
+    'the firepry prompt',
+    [proc { |obj, nest_level, _| "[#{line += 1}] firepry(#{current_obj(obj)})> " }]
+  )
+)

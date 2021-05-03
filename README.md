@@ -33,20 +33,20 @@ Usage: firepry [options]
 
 A few different ways to start it:
 ```shell
-$ firepry                    # if $FIRESTORE_CREDENTIALS is already set up in your environment
-$ firepry -k gcloud-key.json # where `gcloud-key.json` is your GCP keyfile 
+$ firepry                            # if $FIRESTORE_CREDENTIALS is already set up in your environment
+$ firepry -k gcloud-key.json         # where `gcloud-key.json` is your GCP keyfile 
 $ firepry -p asdf -e localhost:5001  # if you're using a local emulator
 ```
 
-To issue query:
+To issue queries, etc...:
 
 ```shell
-$ firepry
-[1] pry(main)> db.collection('users').doc('user_id_blahblahblah').get.data
-{
-  username: 'broothie',
-  more_data: 'goes here'
-}
+# Get doc by id
+[1] firepry(db)> collection('users').doc('user_id_blahblahblah').get.data
+# Get first doc in collection
+[2] firepry(db)> collection('users').get.first.data
+# Query collection
+[3] firepry(db)> collection('users').where('follower_count', '>', 1_000_000).get
 ```
 
 More info:
@@ -60,35 +60,40 @@ Here's all the code:
 
 ```ruby
 #! /usr/bin/env ruby
+require 'dotenv/load'
 require 'optparse'
 require 'pry'
 require 'google/cloud/firestore'
+require 'firepry'
 
 firestore_options = {}
 OptionParser.new do |opts|
-  opts.on('-p', '--project-id PROJECT-ID', 'GCP project ID') do |opt|
-    firestore_options[:project_id] = opt
-  end
+  opts.banner = "firepry v#{FirePry::VERSION}\nUsage: firepry [options]"
 
-  opts.on('-k', '--keyfile KEYFILE', 'GCP keyfile') do |opt|
-    firestore_options[:keyfile] = opt
-  end
-
-  opts.on('-e', '--endpoint ENDPOINT', 'Firestore endpoint URL') do |opt|
-    firestore_options[:endpoint] = opt
-  end
+  opts.on('-v', '--version', 'Show version') { puts "firepry v#{FirePry::VERSION}"; exit }
+  opts.on('-p', '--project-id PROJECT-ID', 'GCP project ID') { |opt| firestore_options[:project_id] = opt }
+  opts.on('-k', '--keyfile KEYFILE', 'GCP keyfile') { |opt| firestore_options[:keyfile] = opt }
+  opts.on('-e', '--endpoint ENDPOINT', 'Firestore endpoint URL') { |opt| firestore_options[:endpoint] = opt }
 end.parse!
 
 @firestore = Google::Cloud::Firestore.new(**firestore_options)
 
-def firestore
-  @firestore
+def current_obj(obj)
+  obj == @firestore ? 'db' : obj
 end
-alias db firestore
 
-Pry.start
+line = 0
+Pry.start(
+  @firestore,
+  prompt: Pry::Prompt.new(
+    'firepry',
+    'the firepry prompt',
+    [proc { |obj, nest_level, _| "[#{line += 1}] firepry(#{current_obj(obj)})> " }]
+  )
+)
 ```
 
 ## Attributions
 
 - https://github.com/pry/pry
+- https://cloud.google.com/firestore
