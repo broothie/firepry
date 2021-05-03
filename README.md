@@ -1,6 +1,6 @@
 # 🔥💎 firepry
 
-A Firestore REPL that's actually just [Pry](https://github.com/pry/pry).
+A [Firestore](https://cloud.google.com/firestore) REPL that's actually just [Pry](https://github.com/pry/pry).
 
 ## About
 
